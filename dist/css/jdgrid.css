@@ -1,0 +1,12 @@
+.jdgrid-wrap-head, .jdgrid-wrap-body {
+	overflow-y: scroll;
+	overflow-x:hidden;
+}
+
+.jdgrid-wrap-head table, .jdgrid-wrap-body table{
+	margin-bottom: 0px;
+}
+
+.jdgrid-wrap-body table td,.jdgrid-wrap-head table th {
+	vertical-align:middle !important;
+}
