@@ -28,14 +28,17 @@
 				dateFormat:'d/m/Y',
 				height:'300px',
 				pageSize:20,
-				itemCount:0
+				itemCount:0,
+				curPage:1
 			},optAct);
 			
 			console.log('------Init jdGrid------');
 			var headWrap=$('<div class="jdgrid-wrap-head"></div>').css({'border-top':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd'});
 			var bodyWrap=$('<div class="jdgrid-wrap-body"></div>').css({'border-bottom':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd','height':setting.height});
+			var footerWrap=$('<div class="jdgrid-wrap-footer row"></div>');
 			var tblHead=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead></table>');
 			var tblBody=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead><tbody></tboy></table>');
+			var paging=$('<div class="col-md-6"><nav><ul class="pagination pagination-sm"><li><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li></ul></nav></div><div class="col-md-6 text-right"><nav><ul class="pagination pagination-sm"><li>Showing 1 to 10 of 30</li></div>');
 			
 			// Gen header
 			$.each(optAct.columns, function(i,item){
@@ -89,8 +92,10 @@
 			
 			headWrap.append(tblHead);
 			bodyWrap.append(tblBody);
+			footerWrap.append(paging);
 			this.append(headWrap);
 			this.append(bodyWrap);
+			this.append(footerWrap);
 			
 			drawGrid(this);
 		}
