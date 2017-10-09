@@ -1,18 +1,112 @@
 (function($){
-	var priVar;
+	var colsCss={};
+	var colsType={};
 	$.fn.jdGrid=function(optAct,arg){
-		priVar=this.text();
 		if(typeof optAct === 'string'){
 			switch(optAct){
 				case 'debug':
-					console.log(priVar);
+					//console.log(priVar);
 					break;
 				default:
 					
 			}
 		}else{
-			console.log('Init jdGrid');
+			var setting=$.extend({
+				separator:'.',
+				decimalpoint:',',
+				dateFormat:'d/m/Y',
+				height:'300px',
+				pageSize:20,
+				totalItem:0
+			},optAct);
+			
+			console.log('------Init jdGrid------');
+			var headWrap=$('<div class="jdgrid-wrap-head"></div>').css({'border-top':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd'});
+			var bodyWrap=$('<div class="jdgrid-wrap-body"></div>').css({'border-bottom':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd','height':setting.height});
+			var tblHead=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead></table>');
+			var tblBody=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead><tbody></tboy></table>');
+			
+			// Gen header
+			$.each(optAct.columns, function(i,item){
+				var style={};
+				if(item.align!=undefined){
+					style['text-align']=item.align;
+				}
+				if(item.width!=undefined){
+					style['width']=item.width;					
+				}
+				colsCss[item.name]=style;
+				colsType[item.name]=item.type==undefined?'':item.type;
+				
+				var th=$('<th></th>').html(item.title).css(style);
+				tblHead.find('thead tr').append(th);
+				tblBody.find('thead tr').append(th.clone());
+			});
+			
+			// Gen body
+			$.each(optAct.data, function(i,item){
+				var tr=$('<tr></tr>');
+				$.each(optAct.columns, function(j,itm){
+					var td=$('<td></td>').css(colsCss[itm.name]);
+					switch(itm.type){
+						case 'money':
+							td.html(formatNumber(item[itm.name], setting.separator));
+							break;
+						case 'date':
+							td.html(reformatDate(item[itm.name]));
+							break;
+						case 'interval':
+							td.html(milisecToDate(item[itm.name]));
+							break;
+						case 'base64img':
+							td.html('<img src="data:image/png;base64,'+item[itm.name]+'" class="img-responsive" width="17" />');
+							break;
+						case 'control':
+							td.html(itm.content(i,item));
+							break;
+						case 'check':
+							var checked=(item[itm.name]==1||item[itm.name]==true)?'checked':'';
+							td.html('<input type="checkbox" disabled="disabled" '+checked+' />');
+							break;
+						default:
+							td.html(item[itm.name]);
+					}
+					tr.append(td);
+				});
+				tblBody.find('tbody').append(tr);
+			});
+			
+			headWrap.append(tblHead);
+			bodyWrap.append(tblBody);
+			this.append(headWrap);
+			this.append(bodyWrap);
+			
+			drawGrid(this);
 		}
 		return this;
 	};
 }(jQuery));
+
+function drawGrid(obj){
+	if(obj.find('.jdgrid-wrap-body').length>0 && obj.find('.jdgrid-wrap-head').length>0){
+		obj.find('.jdgrid-wrap-body table thead tr:first th').each(function(i){
+			var w=$(this).outerWidth();
+			obj.find('.jdgrid-wrap-head table thead tr:first th:nth-child('+(i+1)+')').outerWidth(w);
+		});
+		obj.find('.jdgrid-wrap-body table').css('margin-top','-'+$('.jdgrid-wrap-body table thead').outerHeight()+'px');
+	}
+}
+
+function formatNumber(num,sep) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+}
+
+function reformatDate(dateStr){
+  dArr = dateStr.split("-");
+  return dArr[2]+ "/" +dArr[1]+ "/" +dArr[0];
+}
+
+function milisecToDate(interval){
+	var date=new Date(interval);
+	return ('0'+date.getDate()).slice(-2) + '/' +  ('0'+(date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
+}
