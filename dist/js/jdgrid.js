@@ -26,19 +26,16 @@
 				separator:'.',
 				decimalpoint:',',
 				dateFormat:'d/m/Y',
-				height:'300px',
-				pageSize:20,
-				itemCount:0,
-				curPage:1
+				height:'300px'
 			},optAct);
 			
-			console.log('------Init jdGrid------');
+			//console.log('------Init jdGrid------');
 			var headWrap=$('<div class="jdgrid-wrap-head"></div>').css({'border-top':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd'});
 			var bodyWrap=$('<div class="jdgrid-wrap-body"></div>').css({'border-bottom':'1px solid #ddd','border-left':'1px solid #ddd','border-right':'1px solid #ddd','height':setting.height});
 			var footerWrap=$('<div class="jdgrid-wrap-footer row"></div>');
 			var tblHead=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead></table>');
 			var tblBody=$('<table class="table table-bordered table-striped"><thead><tr></tr></thead><tbody></tboy></table>');
-			var paging=$('<div class="col-md-6"><nav><ul class="pagination pagination-sm"><li><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li></ul></nav></div><div class="col-md-6 text-right"><nav><ul class="pagination pagination-sm"><li>Showing 1 to 10 of 30</li></div>');
+			//var paging=$('<div class="col-md-8"><nav><ul class="pagination pagination-sm jdgrid-paging"></ul></nav></div><div class="col-md-4 text-right"><nav><ul class="pagination pagination-sm jdgrid-paging-info"><li>Showing 1 to 10 of 30</li></div>');
 			
 			// Gen header
 			$.each(optAct.columns, function(i,item){
@@ -92,11 +89,12 @@
 			
 			headWrap.append(tblHead);
 			bodyWrap.append(tblBody);
-			footerWrap.append(paging);
+			//footerWrap.append(paging);
 			this.append(headWrap);
 			this.append(bodyWrap);
-			this.append(footerWrap);
+			//this.append(footerWrap);
 			
+			genPaging(this, setting.pageCount, setting.curPage);
 			drawGrid(this);
 		}
 		return this;
@@ -181,6 +179,15 @@
 		drawGrid(obj);
 	}
 
+	function genPaging(obj,sett){
+		/* if(pageCount<=1) return;
+		obj.find('.jdgrid-paging').append('<li><a href="#" class="jdgrid-page" page="1">&laquo;</a></li>');
+		for(var i=1;i<=pageCount;i++){
+			
+		}
+		obj.find('.jdgrid-paging').append('<li><a href="#" class="jdgrid-page" page="'+(curPage+1)+'">&raquo;</a></li>'); */
+	}
+	
 	function formatNumber(num,sep) {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
 	}
