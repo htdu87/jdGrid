@@ -1,16 +1,74 @@
 (function($){
-	var defaultOptions= {
+	var gridDefaultOptions={
 		height:'300px',
 		separator:'.',
 		columns:[]
+	};
+	var pageDefaultOptions={
+		totalPage:0,
+		curPage:0,
+		itemPerPage:0,
+		totalItem:0,
+		onPageChange:function(){}
 	}
 	
+	$.fn.jdPage=function(opt){
+		var options=$.extend(pageDefaultOptions,opt);
+		$(this).each(function(index,obj){
+			var jdpage={
+				element:$(this),
+				totalPage:options.totalPage,
+				curPage:options.curPage,
+				itemPerPage:options.itemPerPage,
+				totalItem:options.totalItem,
+				onPageChange:options.onPageChange
+			};
+			$(this).data('jdpage', jdpage);
+			
+			var row=$('<div class="row"></div>');
+			var info=$('<div class="col-md-5 jdgage-info">Hiển thị <b><span class="jdpage-start"></span></b> đến <b><span class="jdpage-end"></span></b> của <b><span class="jdpage-total-item"></span></b></div>');
+			var paging=$('<div class="col-md-7 text-right jdpage-paging-contain"></div>');
+			row.append(info).append(paging);
+			$(this).append(row);
+			updateControl(obj);
+			
+			$('.jdpage-page').click(function(e){
+				e.preventDefault();
+				jdpage.onPageChange($(this).attr('page'));
+			});
+		});
+		
+		function updateControl(obj){
+			var start=options.curPage>0?(options.curPage*options.itemPerPage-options.itemPerPage)+1:0;
+			var end=options.curPage*options.itemPerPage;
+			end=end>=options.totalItem?options.totalItem:end;
+			
+			$(obj).find('.jdpage-start').text(start);
+			$(obj).find('.jdpage-end').text(end);
+			$(obj).find('.jdpage-total-item').text(options.totalItem);
+			
+			var paging=$('<nav class="jdpage-paging"><ul class="pagination pagination-sm"></ul></nav>');
+			if(options.totalPage>1){
+				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="1">&laquo;</a></li>');
+				for(var i=1;i<=options.totalPage;i++){
+					var active=i==options.curPage?'class="active"':'';
+					$(paging).find('.pagination').append('<li '+active+'><a href="#" class="jdpage-page" page="'+i+'">'+i+'</a></li>');
+				}
+				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="'+options.totalPage+'">&raquo;</a></li>');
+			}
+			$(obj).find('.jdpage-paging').remove();
+			$(obj).find('.jdpage-paging-contain').append(paging);
+		}
+		
+		return $(this);
+	};
+	
 	$.fn.jdGrid=function(opt){
-		options=$.extend(defaultOptions,opt);
+		var options=$.extend(gridDefaultOptions,opt);
 		
 		$(this).each(function(index,obj){
 			var jdgrid={
-				element: $(this),
+				element:$(this),
 				columns:options.columns,
 				fillData:function(data){
 					$(obj).find('.jdgrid-wrap-body table tbody tr').remove();

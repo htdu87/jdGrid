@@ -10,3 +10,11 @@
 .jdgrid-wrap-body table td,.jdgrid-wrap-head table th {
 	vertical-align:middle !important;
 }
+
+.jdpage-paging .pagination {
+	margin: 0px;
+}
+
+.jdgage-info {
+	padding-top: 8px;
+}

@@ -21,6 +21,20 @@ $(document).ready(function(){
 		]
 	});
 	
+	$('#jdpage').jdPage({
+		totalPage:0,
+		curPage:0,
+		itemPerPage:0,
+		totalItem:0
+	});
+	
+	$('#jdpage1').jdPage({
+		totalPage:3,
+		curPage:1,
+		itemPerPage:10,
+		totalItem:25
+	});
+	
 	 g.data('jdgrid').fillData([
 		{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:'162700'},
 		{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000},
