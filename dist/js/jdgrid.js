@@ -5,7 +5,7 @@
 		columns:[]
 	}
 	
-	$.fn.jdGrid=function(opt,arg){
+	$.fn.jdGrid=function(opt){
 		options=$.extend(defaultOptions,opt);
 		
 		$(this).each(function(index,obj){
@@ -25,6 +25,9 @@
 				},
 				addRow:function(row){
 					$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator));
+					drawGrid(obj);
+				},
+				refresh:function(){					
 					drawGrid(obj);
 				}
 			};
@@ -54,6 +57,11 @@
 			bodyWrap.append(tblBody);
 			$(this).append(headWrap);
 			$(this).append(bodyWrap);
+			drawGrid(obj);
+			
+			$(window).resize(function(){
+				drawGrid(obj);
+			});
 		});
 		
 		function drawGrid(obj){
@@ -62,7 +70,7 @@
 					var w=$(this).outerWidth();
 					$(obj).find('.jdgrid-wrap-head table thead tr:first th:nth-child('+(i+1)+')').outerWidth(w);
 				});
-				$(obj).find('.jdgrid-wrap-body table').css('margin-top','-'+$('.jdgrid-wrap-body table thead').outerHeight()+'px');
+				$(obj).find('.jdgrid-wrap-body table').css('margin-top','-'+$(obj).find('.jdgrid-wrap-head table thead').outerHeight()+'px');
 			}
 		}
 		
