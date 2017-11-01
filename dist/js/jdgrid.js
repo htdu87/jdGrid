@@ -45,6 +45,7 @@
 			
 			var options=$(obj).data('jdpage');
 			var start=options.curPage>0?(options.curPage*options.itemPerPage-options.itemPerPage)+1:0;
+			start=start>=options.totalItem?options.totalItem:start;
 			var end=options.curPage*options.itemPerPage;
 			end=end>=options.totalItem?options.totalItem:end;
 			
