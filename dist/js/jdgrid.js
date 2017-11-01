@@ -66,7 +66,7 @@
 			
 			$(obj).find('.jdpage-page').click(function(e){
 				e.preventDefault();
-				options.onPageChange($(this).attr('page'),obj);
+				options.onPageChange($(this).attr('page'));
 			});
 			
 		}
