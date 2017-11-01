@@ -25,14 +25,20 @@ $(document).ready(function(){
 		totalPage:0,
 		curPage:0,
 		itemPerPage:0,
-		totalItem:0
+		totalItem:0,
+		onPageChange:function(page){
+			console.log('jdpage: '+page);
+		}
 	});
 	
 	$('#jdpage1').jdPage({
 		totalPage:3,
 		curPage:1,
 		itemPerPage:10,
-		totalItem:25
+		totalItem:25,
+		onPageChange:function(page){
+			console.log('jdpage1: '+page);
+		}
 	});
 	
 	 g.data('jdgrid').fillData([
@@ -48,9 +54,10 @@ $(document).ready(function(){
 	]); 
 	
 	$('#btnRefresh').click(function(){
-		$('.jdgrid').each(function(i,o){
+		/* $('.jdgrid').each(function(i,o){
 			$(o).data('jdgrid').refresh();
-		});
+		}); */
 		//$('.jdgrid').data('jdgrid').refresh();
+		$('.jdpage').data('jdpage').update([3,2,10,25]);
 	});
 });

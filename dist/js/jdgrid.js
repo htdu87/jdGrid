@@ -21,6 +21,14 @@
 				curPage:options.curPage,
 				itemPerPage:options.itemPerPage,
 				totalItem:options.totalItem,
+				update:function(data){
+					jdpage.totalPage=data[0];
+					jdpage.curPage=data[1];
+					jdpage.itemPerPage=data[2];
+					jdpage.totalItem=data[3];
+					
+					updateControl(obj);
+				},
 				onPageChange:options.onPageChange
 			};
 			$(this).data('jdpage', jdpage);
@@ -31,14 +39,11 @@
 			row.append(info).append(paging);
 			$(this).append(row);
 			updateControl(obj);
-			
-			$('.jdpage-page').click(function(e){
-				e.preventDefault();
-				jdpage.onPageChange($(this).attr('page'));
-			});
 		});
 		
 		function updateControl(obj){
+			
+			var options=$(obj).data('jdpage');
 			var start=options.curPage>0?(options.curPage*options.itemPerPage-options.itemPerPage)+1:0;
 			var end=options.curPage*options.itemPerPage;
 			end=end>=options.totalItem?options.totalItem:end;
@@ -58,9 +63,15 @@
 			}
 			$(obj).find('.jdpage-paging').remove();
 			$(obj).find('.jdpage-paging-contain').append(paging);
+			
+			$(obj).find('.jdpage-page').click(function(e){
+				e.preventDefault();
+				options.onPageChange($(this).attr('page'),obj);
+			});
+			
 		}
 		
-		return $(this);
+		return $(options);
 	};
 	
 	$.fn.jdGrid=function(opt){
