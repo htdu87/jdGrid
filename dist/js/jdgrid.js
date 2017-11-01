@@ -105,8 +105,8 @@
 			
 			var headWrap=$('<div class="jdgrid-wrap-head"></div>');
 			var bodyWrap=$('<div class="jdgrid-wrap-body"></div>').css({'height':options.height});
-			var tblHead=$('<table class="table table-bordered table-condensed"><thead><tr></tr></thead></table>');
-			var tblBody=$('<table class="table table-bordered table-condensed"><thead><tr></tr></thead><tbody></tboy></table>');
+			var tblHead=$('<table class="table table-bordered table-condensed table-hover"><thead><tr></tr></thead></table>');
+			var tblBody=$('<table class="table table-bordered table-condensed table-hover"><thead><tr></tr></thead><tbody></tboy></table>');
 			
 			$.each(options.columns, function(i,item){
 				var style={};
