@@ -29,7 +29,10 @@
 					
 					updateControl(obj);
 				},
-				onPageChange:options.onPageChange
+				onPageChange:options.onPageChange,
+				getCurPage:function(){
+					return jdpage.curPage;
+				}
 			};
 			$(this).data('jdpage', jdpage);
 			
