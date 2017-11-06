@@ -128,8 +128,7 @@
 			
 			headWrap.append(tblHead);
 			bodyWrap.append(tblBody);
-			$(this).append(headWrap);
-			$(this).append(bodyWrap);
+			$(this).append(headWrap).append(bodyWrap).css({'border':'1px solid #d2d6de'});
 			drawGrid(obj);
 			
 			$(window).resize(function(){
