@@ -1,21 +1,18 @@
 (function($){
-	var gridDefaultOptions={
-		height:'300px',
-		separator:'.',
-		columns:[],
-		data:[]
-	};
-	var pageDefaultOptions={
-		totalPage:0,
-		curPage:0,
-		itemPerPage:0,
-		totalItem:0,
-		onPageChange:function(){}
-	}
 	
+	// jdPage
 	$.fn.jdPage=function(opt){
+		var pageDefaultOptions={
+			totalPage:0,
+			curPage:0,
+			itemPerPage:0,
+			totalItem:0,
+			onPageChange:function(){}
+		}
+		
 		var options=$.extend(pageDefaultOptions,opt);
-		$(this).each(function(index,obj){
+		
+		$(this).each(function(){
 			var jdpage={
 				element:$(this),
 				totalPage:options.totalPage,
@@ -23,16 +20,16 @@
 				itemPerPage:options.itemPerPage,
 				totalItem:options.totalItem,
 				update:function(data){
-					jdpage.totalPage=data[0];
-					jdpage.curPage=data[1];
-					jdpage.itemPerPage=data[2];
-					jdpage.totalItem=data[3];
+					this.totalPage=data[0];
+					this.curPage=data[1];
+					this.itemPerPage=data[2];
+					this.totalItem=data[3];
 					
-					updateControl(obj);
+					updateControl(this.element);
 				},
 				onPageChange:options.onPageChange,
 				getCurPage:function(){
-					return jdpage.curPage;
+					return this.curPage;
 				}
 			};
 			$(this).data('jdpage', jdpage);
@@ -42,20 +39,20 @@
 			var paging=$('<div class="col-md-7 text-right jdpage-paging-contain"></div>');
 			row.append(info).append(paging);
 			$(this).append(row);
-			updateControl(obj);
+			
+			updateControl($(this));
 		});
 		
 		function updateControl(obj){
-			
-			var options=$(obj).data('jdpage');
+			var options=obj.data('jdpage');
 			var start=options.curPage>0?(options.curPage*options.itemPerPage-options.itemPerPage)+1:0;
 			start=start>=options.totalItem?options.totalItem:start;
 			var end=options.curPage*options.itemPerPage;
 			end=end>=options.totalItem?options.totalItem:end;
 			
-			$(obj).find('.jdpage-start').text(start);
-			$(obj).find('.jdpage-end').text(end);
-			$(obj).find('.jdpage-total-item').text(options.totalItem);
+			obj.find('.jdpage-start').text(start);
+			obj.find('.jdpage-end').text(end);
+			obj.find('.jdpage-total-item').text(options.totalItem);
 			
 			var paging=$('<nav class="jdpage-paging"><ul class="pagination pagination-sm"></ul></nav>');
 			if(options.totalPage>1){
@@ -66,66 +63,73 @@
 				}
 				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="'+options.totalPage+'">&raquo;</a></li>');
 			}
-			$(obj).find('.jdpage-paging').remove();
-			$(obj).find('.jdpage-paging-contain').append(paging);
+			obj.find('.jdpage-paging').remove();
+			obj.find('.jdpage-paging-contain').append(paging);
 			
-			$(obj).find('.jdpage-page').click(function(e){
+			obj.find('.jdpage-page').click(function(e){
 				e.preventDefault();
 				options.onPageChange($(this).attr('page'));
 			});
-			
 		}
 		
-		return $(options);
+		return $(this);
 	};
 	
+	// jdGrid
 	$.fn.jdGrid=function(opt){
+		
+		var gridDefaultOptions={
+			height:'300px',
+			separator:'.',
+			columns:[],
+			data:[]
+		};
+		
 		var options=$.extend(gridDefaultOptions,opt);
-		$(this).each(function(index,obj){
-			
+		$(this).each(function(){
 			var jdgrid={
 				element:$(this),
 				columns:options.columns,
 				data:options.data,
+				separator:options.separator,
 				fillData:function(data){
-					jdgrid.data=data;
-					$(obj).find('.jdgrid-wrap-body table tbody tr').remove();
+					this.data=data;
+					this.element.find('.jdgrid-wrap-body table tbody tr').remove();
+					rcount=0;
+					var target=this;
 					$.each(data, function(i,row){
-						var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length;
-						$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
+						target.element.find('.jdgrid-wrap-body table tbody').append(createDataRow(target.columns,row,target.separator,rcount++));
 					});
 					
-					drawGrid(obj);
+					drawGrid(this.element);
 				},
 				updateColumn:function(i,col){
-					jdgrid.columns[i]=col;
+					this.columns[i]=col;
 				},
 				addRow:function(row){
-					jdgrid.data.push(row);
-					var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length;
-					$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
-					drawGrid(obj);
+					this.data.push(row);
+					var rcount=this.element.find('.jdgrid-wrap-body table tbody tr').length;
+					this.element.find('.jdgrid-wrap-body table tbody').append(createDataRow(this.columns,row,this.separator,rcount));
+					drawGrid(this.element);
 				},
 				refresh:function(){					
-					jdgrid.fillData(jdgrid.data);
-					drawGrid(obj);
+					this.fillData(this.data);
 				},
 				remRowByIndex:function(index){
-					jdgrid.data.splice(index,1);
-					console.log(jdgrid.data);
-					$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+(index)+')').remove();
+					this.data.splice(index,1);
+					this.element.find('.jdgrid-wrap-body table tbody tr:eq('+(index)+')').remove();
 				},
 				remRowById:function(id,colName){
-					for(var i=0;i<jdgrid.data.length;i++){
-						if(jdgrid.data[i][colName]==id){
-							$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+(i)+')').remove();
+					for(var i=0;i<this.data.length;i++){
+						if(this.data[i][colName]==id){
+							$this.element.find('.jdgrid-wrap-body table tbody tr:eq('+(i)+')').remove();
 							break;
 						}
 					}
-					jdgrid.data.splice(i,1);
+					this.data.splice(i,1);
 				},
 				getData:function(){
-					return jdgrid.data;
+					return this.data;
 				}
 			};
 			
@@ -153,20 +157,20 @@
 			headWrap.append(tblHead);
 			bodyWrap.append(tblBody);
 			$(this).append(headWrap).append(bodyWrap).css({'border':'1px solid #d2d6de'});
-			drawGrid(obj);
+			drawGrid($(this));
 			
 			$(window).resize(function(){
-				drawGrid(obj);
+				drawGrid($(this));
 			});
-		});
+		});  // end each target
 		
 		function drawGrid(obj){
-			if($(obj).find('.jdgrid-wrap-body').length>0 && $(obj).find('.jdgrid-wrap-head').length>0){
-				$(obj).find('.jdgrid-wrap-body table thead tr:first th').each(function(i){
+			if(obj.find('.jdgrid-wrap-body').length>0 && obj.find('.jdgrid-wrap-head').length>0){
+				obj.find('.jdgrid-wrap-body table thead tr:first th').each(function(i){
 					var w=$(this).outerWidth();
-					$(obj).find('.jdgrid-wrap-head table thead tr:first th:nth-child('+(i+1)+')').outerWidth(w);
+					obj.find('.jdgrid-wrap-head table thead tr:first th:nth-child('+(i+1)+')').outerWidth(w);
 				});
-				$(obj).find('.jdgrid-wrap-body table').css('margin-top','-'+$(obj).find('.jdgrid-wrap-head table thead').outerHeight()+'px');
+				obj.find('.jdgrid-wrap-body table').css('margin-top','-'+obj.find('.jdgrid-wrap-head table thead').outerHeight()+'px');
 			}
 		}
 		
