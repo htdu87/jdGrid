@@ -80,15 +80,16 @@
 	
 	$.fn.jdGrid=function(opt){
 		var options=$.extend(gridDefaultOptions,opt);
-		
 		$(this).each(function(index,obj){
+			
 			var jdgrid={
 				element:$(this),
 				columns:options.columns,
 				fillData:function(data){
 					$(obj).find('.jdgrid-wrap-body table tbody tr').remove();
 					$.each(data, function(i,row){
-						$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator));
+						var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length+1;
+						$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
 					});
 					
 					drawGrid(obj);
@@ -97,7 +98,8 @@
 					jdgrid.columns[i]=col;
 				},
 				addRow:function(row){
-					$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator));
+					var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length+1;
+					$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
 					drawGrid(obj);
 				},
 				refresh:function(){					
@@ -146,7 +148,7 @@
 			}
 		}
 		
-		function createDataRow(columns,row,separator){
+		function createDataRow(columns,row,separator,count){
 			var tr=$('<tr></tr>');
 			$.each(columns, function(i,col){
 				var style={};
@@ -171,7 +173,8 @@
 					td.html('<img src="data:image/png;base64,'+row[col.name]+'" class="img-responsive" width="17" />');
 					break;
 				case 'control':
-					td.html(col.content(i,row));
+					
+					td.html(col.content(count,row));
 					break;
 				case 'check':
 					var checked=(row[col.name]==1||row[col.name]==true)?'checked':'';
