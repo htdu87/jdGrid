@@ -2,7 +2,8 @@
 	var gridDefaultOptions={
 		height:'300px',
 		separator:'.',
-		columns:[]
+		columns:[],
+		data:[]
 	};
 	var pageDefaultOptions={
 		totalPage:0,
@@ -85,10 +86,12 @@
 			var jdgrid={
 				element:$(this),
 				columns:options.columns,
+				data:options.data,
 				fillData:function(data){
+					jdgrid.data=data;
 					$(obj).find('.jdgrid-wrap-body table tbody tr').remove();
 					$.each(data, function(i,row){
-						var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length+1;
+						var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length;
 						$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
 					});
 					
@@ -98,12 +101,21 @@
 					jdgrid.columns[i]=col;
 				},
 				addRow:function(row){
-					var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length+1;
+					jdgrid.data.push(row);
+					var rcount=$(obj).find('.jdgrid-wrap-body table tbody tr').length;
 					$(obj).find('.jdgrid-wrap-body table tbody').append(createDataRow(jdgrid.columns,row,options.separator,rcount));
 					drawGrid(obj);
 				},
 				refresh:function(){					
+					jdgrid.fillData(jdgrid.data);
 					drawGrid(obj);
+				},
+				remRow:function(position){
+					jdgrid.data.splice(position,1);
+					$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+position+')').remove();
+				},
+				getData:function(){
+					return jdgrid.data;
 				}
 			};
 			
@@ -173,7 +185,6 @@
 					td.html('<img src="data:image/png;base64,'+row[col.name]+'" class="img-responsive" width="17" />');
 					break;
 				case 'control':
-					
 					td.html(col.content(count,row));
 					break;
 				case 'check':
