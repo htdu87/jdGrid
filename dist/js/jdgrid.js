@@ -110,9 +110,19 @@
 					jdgrid.fillData(jdgrid.data);
 					drawGrid(obj);
 				},
-				remRow:function(position){
-					jdgrid.data.splice(position,1);
-					$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+position+')').remove();
+				remRowByIndex:function(index){
+					jdgrid.data.splice(index,1);
+					console.log(jdgrid.data);
+					$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+(index)+')').remove();
+				},
+				remRowById:function(id,colName){
+					for(var i=0;i<jdgrid.data.length;i++){
+						if(jdgrid.data[i][colName]==id){
+							$(obj).find('.jdgrid-wrap-body table tbody tr:eq('+(i)+')').remove();
+							break;
+						}
+					}
+					jdgrid.data.splice(i,1);
 				},
 				getData:function(){
 					return jdgrid.data;
