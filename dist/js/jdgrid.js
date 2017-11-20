@@ -159,9 +159,9 @@
 			$(this).append(headWrap).append(bodyWrap).css({'border':'1px solid #d2d6de'});
 			drawGrid($(this));
 			
-			$(window).resize(function(){
+			/* $(window).resize(function(){
 				drawGrid($(this));
-			});
+			}); */
 		});  // end each target
 		
 		function drawGrid(obj){
