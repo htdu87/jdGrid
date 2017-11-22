@@ -122,7 +122,7 @@
 				remRowById:function(id,colName){
 					for(var i=0;i<this.data.length;i++){
 						if(this.data[i][colName]==id){
-							$this.element.find('.jdgrid-wrap-body table tbody tr:eq('+(i)+')').remove();
+							this.element.find('.jdgrid-wrap-body table tbody tr:eq('+(i)+')').remove();
 							break;
 						}
 					}
