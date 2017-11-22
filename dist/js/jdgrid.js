@@ -130,6 +130,10 @@
 				},
 				getData:function(){
 					return this.data;
+				},
+				clear:function(){
+					this.data=[];
+					this.element.find('.jdgrid-wrap-body table tbody tr').remove();
 				}
 			};
 			
