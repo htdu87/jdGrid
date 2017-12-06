@@ -35,7 +35,7 @@
 			$(this).data('jdpage', jdpage);
 			
 			var row=$('<div class="row"></div>');
-			var info=$('<div class="col-md-5 jdgage-info">Hiển thị <b><span class="jdpage-start"></span></b> đến <b><span class="jdpage-end"></span></b> của <b><span class="jdpage-total-item"></span></b></div>');
+			var info=$('<div class="col-md-5 jdgage-info">Hiển thị <b><span class="jdpage-start"></span></b> đến <b><span class="jdpage-end"></span></b> của <b><span class="jdpage-total-item"></span></b>  [Trang <span class="jdpage-cur-page">0</span>/<span class="jdpage-total-page">0</span>]</div>');
 			var paging=$('<div class="col-md-7 text-right jdpage-paging-contain"></div>');
 			row.append(info).append(paging);
 			$(this).append(row);
@@ -53,11 +53,20 @@
 			obj.find('.jdpage-start').text(start);
 			obj.find('.jdpage-end').text(end);
 			obj.find('.jdpage-total-item').text(options.totalItem);
+			obj.find('.jdpage-cur-page').text(options.curPage);
+			obj.find('.jdpage-total-page').text(options.totalPage);
 			
 			var paging=$('<nav class="jdpage-paging"><ul class="pagination pagination-sm"></ul></nav>');
 			if(options.totalPage>1){
+				var curPage=options.curPage<=0?1:options.curPage;
+				curPage=options.curPage>options.totalPage?options.totalPage:options.curPage;
+				
+				var pstart=curPage-2>0?curPage-2:1;
+				var pend=pstart+4>options.totalPage?options.totalPage:pstart+4;
+				if(pend-4!=pstart)pstart=pend-4;
+				
 				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="1">&laquo;</a></li>');
-				for(var i=1;i<=options.totalPage;i++){
+				for(var i=pstart;i<=pend;i++){
 					var active=i==options.curPage?'class="active"':'';
 					$(paging).find('.pagination').append('<li '+active+'><a href="#" class="jdpage-page" page="'+i+'">'+i+'</a></li>');
 				}
