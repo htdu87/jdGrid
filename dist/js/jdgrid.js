@@ -63,7 +63,7 @@
 				
 				var pstart=curPage-2>0?curPage-2:1;
 				var pend=pstart+4>options.totalPage?options.totalPage:pstart+4;
-				if(pend-4!=pstart)pstart=pend-4;
+				if(pend-4!=pstart && pend-4>0)pstart=pend-4;
 				
 				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="1">&laquo;</a></li>');
 				for(var i=pstart;i<=pend;i++){
