@@ -35,7 +35,7 @@
 			$(this).data('jdpage', jdpage);
 			
 			var row=$('<div class="row"></div>');
-			var info=$('<div class="col-md-5 jdgage-info">Hiển thị <b><span class="jdpage-start"></span></b> đến <b><span class="jdpage-end"></span></b> của <b><span class="jdpage-total-item"></span></b>  [Trang <span class="jdpage-cur-page">0</span>/<span class="jdpage-total-page">0</span>]</div>');
+			var info=$('<div class="col-md-5 jdgage-info">Hiển thị <b><span class="jdpage-start"></span></b> đến <b><span class="jdpage-end"></span></b> của <b><span class="jdpage-total-item"></span></b> [Trang <span class="jdpage-cur-page">0</span>/<span class="jdpage-total-page">0</span>]</div>');
 			var paging=$('<div class="col-md-7 text-right jdpage-paging-contain"></div>');
 			row.append(info).append(paging);
 			$(this).append(row);
@@ -49,22 +49,23 @@
 			start=start>=options.totalItem?options.totalItem:start;
 			var end=options.curPage*options.itemPerPage;
 			end=end>=options.totalItem?options.totalItem:end;
-			
+			var curPage=options.curPage<=0?1:options.curPage;
+			curPage=options.curPage>options.totalPage?options.totalPage:options.curPage;
+				
 			obj.find('.jdpage-start').text(start);
 			obj.find('.jdpage-end').text(end);
 			obj.find('.jdpage-total-item').text(options.totalItem);
-			obj.find('.jdpage-cur-page').text(options.curPage);
+			obj.find('.jdpage-cur-page').text(curPage);
 			obj.find('.jdpage-total-page').text(options.totalPage);
 			
 			var paging=$('<nav class="jdpage-paging"><ul class="pagination pagination-sm"></ul></nav>');
 			if(options.totalPage>1){
-				var curPage=options.curPage<=0?1:options.curPage;
-				curPage=options.curPage>options.totalPage?options.totalPage:options.curPage;
+				
 				
 				var pstart=curPage-2>0?curPage-2:1;
 				var pend=pstart+4>options.totalPage?options.totalPage:pstart+4;
 				if(pend-4!=pstart && pend-4>0)pstart=pend-4;
-				
+			
 				$(paging).find('.pagination').append('<li><a href="#" class="jdpage-page" page="1">&laquo;</a></li>');
 				for(var i=pstart;i<=pend;i++){
 					var active=i==options.curPage?'class="active"':'';
@@ -91,7 +92,8 @@
 			height:'300px',
 			separator:'.',
 			columns:[],
-			data:[]
+			data:[],
+			onRowSelected:function(){}
 		};
 		
 		var options=$.extend(gridDefaultOptions,opt);
@@ -107,7 +109,13 @@
 					rcount=0;
 					var target=this;
 					$.each(data, function(i,row){
-						target.element.find('.jdgrid-wrap-body table tbody').append(createDataRow(target.columns,row,target.separator,rcount++));
+						var _row=createDataRow(target.columns,row,target.separator,rcount++);
+						_row.click(function(){
+							target.element.find('.jdgrid-wrap-body table tbody tr').removeClass('jdgrid-row-active');
+							$(this).addClass('jdgrid-row-active');
+							options.onRowSelected(row);
+						});
+						target.element.find('.jdgrid-wrap-body table tbody').append(_row);
 					});
 					
 					drawGrid(this.element);
@@ -116,9 +124,16 @@
 					this.columns[i]=col;
 				},
 				addRow:function(row){
+					var target=this;
 					this.data.push(row);
 					var rcount=this.element.find('.jdgrid-wrap-body table tbody tr').length;
-					this.element.find('.jdgrid-wrap-body table tbody').append(createDataRow(this.columns,row,this.separator,rcount));
+					var _row=createDataRow(this.columns,row,this.separator,rcount);
+					_row.click(function(){
+						target.element.find('.jdgrid-wrap-body table tbody tr').removeClass('jdgrid-row-active');
+						$(this).addClass('jdgrid-row-active');
+						options.onRowSelected(row);
+					});
+					this.element.find('.jdgrid-wrap-body table tbody').append(_row);
 					drawGrid(this.element);
 				},
 				refresh:function(){					
@@ -140,9 +155,27 @@
 				getData:function(){
 					return this.data;
 				},
-				clear:function(){
+				unSelect:function(){
+					this.element.find('.jdgrid-wrap-body table tbody tr').removeClass('jdgrid-row-active');
+				},
+				getSelected:function(){
+					var i= this.element.find('.jdgrid-wrap-body table tbody tr').index($('.jdgrid-row-active'));
+					return this.data[i];
+				},
+				clearData:function(){
 					this.data=[];
 					this.element.find('.jdgrid-wrap-body table tbody tr').remove();
+				},
+				updateRow:function(i,row){
+					var target=this;
+					this.data[i]=row;
+					var _row=createDataRow(this.columns,row,this.separator,i);
+					_row.click(function(){
+						target.element.find('.jdgrid-wrap-body table tbody tr').removeClass('jdgrid-row-active');
+						$(this).addClass('jdgrid-row-active');
+						options.onRowSelected(row);
+					});
+					target.element.find('.jdgrid-wrap-body table tbody tr:eq('+i+')').replaceWith(_row);
 				}
 			};
 			
@@ -223,6 +256,7 @@
 				}
 				tr.append(td);
 			});
+			
 			return tr;
 		}
 		
