@@ -137,7 +137,8 @@
 					drawGrid(this.element);
 				},
 				refresh:function(){					
-					this.fillData(this.data);
+					//this.fillData(this.data);
+					drawGrid(this.element);
 				},
 				remRowByIndex:function(index){
 					this.data.splice(index,1);
