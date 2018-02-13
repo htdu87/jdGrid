@@ -1,0 +1,44 @@
+(function($){
+	$.fn.jdgrid=function(options){
+		options=$.extend({},$.fn.jdgrid.defaultOptions,options);
+		$(this).each(function(){
+			var jdgrid={
+				element:$(this),
+				columns:options.columns,
+				data:options.data,
+				fillData:function(){
+				},
+				updateColumn:function(){
+				},
+				addRow:function(){
+				},
+				redraw:function(){
+				},
+				remRowByIndex:function(){
+				},
+				remRowById:function(){
+				},
+				getData:function(){
+				},
+				clrData:function(){
+				},
+				getSelection:function(){
+				},
+				clrSelection:function(){
+				},
+				updateRow:function(){
+				}
+			};
+			
+			$(this).data('jdgrid',jdgrid);
+		});
+		return $(this);
+	};
+	$.fn.jdgrid.defaultOptions={
+		height:'300px',
+		columns:[],
+		data:[],
+		onRowSelected:function(){
+		}
+	};
+})(jQuery)
