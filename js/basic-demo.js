@@ -7,7 +7,9 @@ $(document).ready(function(){
 			{name:'age',title:'Age',align:'right'},
 			{name:'date',title:'Start date'},
 			{name:'salary',title:'Salary',align:'right',type:'money'}
-		]
+		],
+		borderClr:'red',
+		footer:true
 	});
 	
 	var g1=$('#jdgrid1').jdGrid({
@@ -21,7 +23,7 @@ $(document).ready(function(){
 		]
 	});
 	
-	$('#jdpage').jdPage({
+	/* $('#jdpage').jdPage({
 		totalPage:0,
 		curPage:0,
 		itemPerPage:0,
@@ -39,7 +41,7 @@ $(document).ready(function(){
 		onPageChange:function(page){
 			console.log('jdpage1: '+page);
 		}
-	});
+	}); */
 	
 	 g.data('jdgrid').fillData([
 		{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:'162700'},
@@ -58,6 +60,7 @@ $(document).ready(function(){
 			$(o).data('jdgrid').refresh();
 		}); */
 		//$('.jdgrid').data('jdgrid').refresh();
-		$('.jdpage').data('jdpage').update([3,2,10,25]);
+		//$('.jdpage').data('jdpage').update([3,2,10,25]);
+		console.log(g.data('jdgrid').columns);
 	});
 });

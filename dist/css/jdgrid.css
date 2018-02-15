@@ -3,7 +3,16 @@
 	overflow-x:hidden;
 }
 
+.jdgrid-header-wrapper,.jdgrid-body-wrapper,.jdgrid-footer-wrapper {
+	overflow-y: scroll;
+	overflow-x:hidden;
+}
+
 .jdgrid-wrap-head table, .jdgrid-wrap-body table{
+	margin-bottom: 0px;
+}
+
+.jdgrid-header-wrapper table,.jdgrid-body-wrapper table,.jdgrid-footer-wrapper table {
 	margin-bottom: 0px;
 }
 
