@@ -1,6 +1,6 @@
 (function($){
 	$.fn.jdGrid=function(options){
-		options=$.extend({},$.fn.jdGrid.defaultOptions,options);
+		var options=$.extend({},$.fn.jdGrid.defaultOptions,options);
 		$(this).each(function(){
 			var jdgrid={
 				element:$(this),
@@ -32,7 +32,7 @@
 			
 			// 
 			var headerWpr=$('<div></div>').addClass('jdgrid-header-wrapper');
-			var bodyWpr=$('<div></div>').addClass('jdgrid-body-wrapper');
+			var bodyWpr=$('<div></div>').addClass('jdgrid-body-wrapper').css({'height':options.height});
 			var footerWpr=$('<div></div>').addClass('jdgrid-footer-wrapper');
 			
 			var tblHeader=$('<table><thead><tr></tr></thead></table>').addClass('table table-bordered table-condensed table-hover');
@@ -59,6 +59,21 @@
 			
 			$(this).append(headerWpr).append(bodyWpr).append(footerWpr).css({'border':'1px solid '+options.borderClr});
 			$(this).data('jdgrid',jdgrid);
+			var _this=$(this);
+			
+			$('.jdgrid-textbox').off('dblclick').on('dblclick',function(){
+				var txtbox=$('<input type="text" value="'+$(this).text()+'" style="width:'+($(this).outerWidth()-20)+'px;height:22px" />');
+				txtbox.focusout(function(){
+					var row_index = $(this).parent().parent().index();
+					var col_index = $(this).parent().index();
+					var data=_this.data('jdgrid').data;
+					console.log(data);
+					options.data[row_index][options.columns[col_index]['name']]=$(this).val();
+					$(this).parent().html($(this).val());
+				});
+				$(this).html(txtbox);
+				txtbox.select();
+			});
 			
 			adjGrid($(this));
 		});
@@ -89,6 +104,9 @@
 					case 'check':
 						var checked=(rowData[col.name]==1||rowData[col.name]==true)?'checked':'';
 						td.html('<input type="checkbox" disabled="disabled" '+checked+' />');
+						break;
+					case 'textbox':
+						td.html(rowData[col.name]).addClass('jdgrid-textbox');
 						break;
 					default:
 						td.html(rowData[col.name]);
