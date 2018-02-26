@@ -78,6 +78,7 @@ $(document).ready(function(){
 		}); */
 		//$('.jdgrid').data('jdgrid').refresh();
 		//$('.jdpage').data('jdpage').update([3,2,10,25]);
-		console.log(g.data('jdgrid').columns);
+		console.log(g.data('jdgrid').getData());
+		console.log(g1.data('jdgrid').getData());
 	});
 });

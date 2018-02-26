@@ -19,6 +19,7 @@
 				remRowById:function(){
 				},
 				getData:function(){
+					return this.data;
 				},
 				clrData:function(){
 				},
@@ -59,16 +60,16 @@
 			
 			$(this).append(headerWpr).append(bodyWpr).append(footerWpr).css({'border':'1px solid '+options.borderClr});
 			$(this).data('jdgrid',jdgrid);
-			var _this=$(this);
 			
 			$('.jdgrid-textbox').off('dblclick').on('dblclick',function(){
 				var txtbox=$('<input type="text" value="'+$(this).text()+'" style="width:'+($(this).outerWidth()-20)+'px;height:22px" />');
 				txtbox.focusout(function(){
 					var row_index = $(this).parent().parent().index();
 					var col_index = $(this).parent().index();
-					var data=_this.data('jdgrid').data;
-					console.log(data);
-					options.data[row_index][options.columns[col_index]['name']]=$(this).val();
+					var data=$(this).parent().parent().parent().parent().parent().parent().data('jdgrid');
+					//console.log($(this).parent().parent().parent().parent().parent().parent().data('jdgrid').data);
+					//console.log(data.data[row_index][data.columns[col_index]['name']]);
+					data.data[row_index][data.columns[col_index]['name']]=$(this).val();
 					$(this).parent().html($(this).val());
 				});
 				$(this).html(txtbox);
