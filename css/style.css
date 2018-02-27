@@ -1,3 +1,8 @@
 .tbl-bold-footer tfoot {
 	font-weight:bold;
 }
+
+.tbl-bold-footer tbody tr.actived {
+	background-color:#78909C;
+	color:#FFF;
+}

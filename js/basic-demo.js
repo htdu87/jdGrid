@@ -5,8 +5,10 @@ $(document).ready(function(){
 			{name:'ten',title:'Họ tên'},
 			{name:'tuoi',title:'Tuổi',css:{'text-align':'right'}},
 			{name:'diachi',title:'Địa chỉ'},
-			{name:'ttac',title:'T.Tác',type:'control',css:{'text-align':'center','width':'50px'},content:function(obj){return '<a href="#">Link</a>'}}
-		]
+			{name:'ttac',title:'T.Tác',type:'control',css:{'text-align':'center','width':'50px'},content:function(obj){return '<a href="#" class="del-row">Link</a>'}}
+		],
+		shwfooter:true,
+		extclass:'tbl-bold-footer'
 	});
 	
 	$('#jdgrid1').jdGrid({
@@ -34,7 +36,7 @@ $(document).ready(function(){
 			{name:'name',title:'Name'},
 			{name:'position',title:'Position', color:'red'},
 			{name:'office',title:'Office'},
-			{name:'age',title:'Age',type:'textbox',css:{'text-align':'right'}},
+			{name:'age',title:'Age',type:'textbox',css:{'text-align':'right','width':'100px'},editable:true},
 			{name:'date',title:'Start date'},
 			{name:'salary',title:'Salary',type:'money',css:{'text-align':'right'}},
 			{name:'input',title:'Act',css:{'text-align':'center','width':'50px'},type:'control',content:function(obj){return '<a href="#">Link</a>'}},
@@ -52,7 +54,10 @@ $(document).ready(function(){
 			{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000}
 		],
 		footer:{age:53,date:'',salary:2400000},
-		shwfooter:true
+		shwfooter:true,
+		onRowSelected:function(obj){
+			//console.log(obj);
+		}
 	});
 	
 	
@@ -139,5 +144,15 @@ $(document).ready(function(){
 		//$('#jdgrid').data('jdgrid').fillData(data);
 		var row={ten:'Otto Clay',tuoi:61,diachi:'911-5143 Luctus Ave'};
 		$('#jdgrid').data('jdgrid').addRow(row);
+		$('.del-row').off('click').on('click',function(e){
+			e.preventDefault();
+			//console.log($(this).index());
+			$('#jdgrid').data('jdgrid').removeRow($('.del-row').index($(this)));
+		});
+		$('#jdgrid').data('jdgrid').setFooter({tuoi:65});
+	});
+	
+	$(window).resize(function(){
+		$('#jdgrid2').data('jdgrid').refresh();
 	});
 });
