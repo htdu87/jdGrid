@@ -1,6 +1,12 @@
 $(document).ready(function(){
 	$('#jdgrid').jdGrid({
-		height:'100px'
+		height:'200px',
+		columns:[
+			{name:'ten',title:'Họ tên'},
+			{name:'tuoi',title:'Tuổi',css:{'text-align':'right'}},
+			{name:'diachi',title:'Địa chỉ'},
+			{name:'ttac',title:'T.Tác',type:'control',css:{'text-align':'center','width':'50px'},content:function(obj){return '<a href="#">Link</a>'}}
+		]
 	});
 	
 	$('#jdgrid1').jdGrid({
@@ -8,12 +14,17 @@ $(document).ready(function(){
 		class:'table table-bordered',
 		columns:[
 			{name:'name',title:'Name'},
-			{name:'age',title:'Age',align:'right'},
+			{name:'age',title:'Age',css:{'text-align':'right'}},
 			{name:'address',title:'Address'},
-			{name:'married',title:'Mred',align:'center',type:'check'},
-			{name:'input',title:'Input',type:'textbox',width:'100px'},
-			{name:'control',title:'Actions',align:'center',type:'control',content:function(i,item){return '<a href="#">Link</a>'}}
-		]
+			{name:'married',title:'Mred',type:'check',css:{'text-align':'center'}}
+		],
+		data:[
+			{name:'Otto Clay',age:61,address:'911-5143 Luctus Ave',married:true},
+			{name:'Timothy Henson',age:78,address:'P.O. Box 738, 7583 Quisque St.',married:false},
+			{name:'Ramona Benton',age:43,address:'847-4303 Dictum Av.',married:true}
+		],
+		footer:{'age':52},
+		shwfooter:true
 	});
 	
 	$('#jdgrid2').jdGrid({
@@ -40,7 +51,8 @@ $(document).ready(function(){
 			{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:162700,input:3},
 			{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000}
 		],
-		footer:{age:53,date:'',salary:2400000}
+		footer:{age:53,date:'',salary:2400000},
+		shwfooter:true
 	});
 	
 	
@@ -118,12 +130,14 @@ $(document).ready(function(){
 	]);  */
 	
 	$('#btnRefresh').click(function(){
-		/* $('.jdgrid').each(function(i,o){
-			$(o).data('jdgrid').refresh();
-		}); */
-		//$('.jdgrid').data('jdgrid').refresh();
-		//$('.jdpage').data('jdpage').update([3,2,10,25]);
-		console.log(g.data('jdgrid').getData());
-		console.log(g1.data('jdgrid').getData());
+		//$('#jdgrid2').data('jdgrid').clearData();
+		var data=[
+			{ten:'Otto Clay',tuoi:61,diachi:'911-5143 Luctus Ave'},
+			{ten:'Timothy Henson',tuoi:78,diachi:'P.O. Box 738, 7583 Quisque St.'},
+			{ten:'Ramona Benton',tuoi:43,diachi:'847-4303 Dictum Av.'}
+		];
+		//$('#jdgrid').data('jdgrid').fillData(data);
+		var row={ten:'Otto Clay',tuoi:61,diachi:'911-5143 Luctus Ave'};
+		$('#jdgrid').data('jdgrid').addRow(row);
 	});
 });
