@@ -9,7 +9,12 @@
 			extclass:'',
 			border:{'border':'1px solid #d2d6de'},
 			shwfooter:false,
-			onRowSelected:function(){}
+			decsym:'.',
+			thosym:',',
+			decnum:2,
+			dateformat:'dd/mm/yyyy hh:MM:ss',
+			onRowSelected:function(){},
+			onCellCommit:function(){}
 		};
 		var settings=$.extend({},defaults,options);
 		return this.each(function(){
@@ -48,6 +53,10 @@
 						$(this.element).find('.jdgrid-body-wrapper table tfoot,.jdgrid-footer-wrapper table tfoot').append(genFooterRow(footer));
 						adjColums(this.element);
 					}
+				},
+				getSelectedRow:function(){
+					var i=$(this.element).find('.jdgrid-body-wrapper table tbody tr.actived').index();
+					return i<0?null:settings.data[i];
 				}
 			};
 			$(this).data('jdgrid',jdgrid);
@@ -75,18 +84,7 @@
 			
 			// table footer
 			var tblBodyFooter=$('<tfoot/>');
-			var tblBodyFooterTr=$('<tr/>');
-			$.each(settings.columns,function(j,colm){
-				var td=$('<td/>');
-				if(settings.footer[colm.name]!=undefined){
-					td.html(settings.footer[colm.name]);
-					if(colm.css!=undefined){
-						td.css(colm.css);
-					}
-				}
-				tblBodyFooterTr.append(td);
-			});
-			tblBodyFooter.append(tblBodyFooterTr);
+			tblBodyFooter.append(genFooterRow(settings.footer));
 			tblBody.append(tblBodyFooter);
 			
 			var headWrp=$('<div/>').addClass('jdgrid-header-wrapper');
@@ -107,11 +105,6 @@
 			
 			tblBodyHeader.css({'visibility':'collapse'});
 			tblBodyFooter.hide();
-			
-			$(this).off('click').on('click',function(){
-				//debug();
-				//console.log(tblBodyHeader.find('tr th:eq(0)').outerWidth());
-			});
 			
 			regEvent(this);
 			
@@ -142,8 +135,11 @@
 						var checked=row[colm.name]||row[colm.name]==1?'checked="checked"':'';
 						td.html('<input type="checkbox" disabled="disabled" '+checked+'/>');
 						break;
+					case 'interval':
+						td.html(milisec2Date(row[colm.name]));
+						break;
 					default:
-						td.html(row[colm.name]);
+						td.html(colm.format?formatNum(row[colm.name],settings.decnum,settings.decsym,settings.thosym):row[colm.name]);
 				}
 				
 				if(colm.css!=undefined){
@@ -162,7 +158,7 @@
 			$.each(settings.columns,function(j,colm){
 				var td=$('<td/>');
 				if(footer[colm.name]!=undefined){
-					td.html(footer[colm.name]);
+					td.html(colm.format?formatNum(footer[colm.name],settings.decnum,settings.decsym,settings.thosym):footer[colm.name]);
 					if(colm.css!=undefined){
 						td.css(colm.css);
 					}
@@ -196,8 +192,41 @@
 				var inpt=$('<input type="text"/>');
 				inpt.css({'color':'#000'}).val($(this).text()).width($(this).width());
 				$(this).html(inpt);
+				adjColums(dom);
 				inpt.select();
+				inpt.keypress(function(e){
+					if(e.which==13){
+						var row = $(this).parent().parent().index();
+						var col = $(this).parent().index();
+						settings.data[row][settings.columns[col]['name']]=$(this).val();
+						$(this).parent().html($(this).val());
+						adjColums(dom);
+						settings.onCellCommit(settings.data[row]);
+					}
+				});
 			});
+		}
+		
+		function formatNum(n,c,d,t){
+			var n = n, 
+				c = isNaN(c = Math.abs(c)) ? 2 : c, 
+				d = d == undefined ? "." : d, 
+				t = t == undefined ? "," : t, 
+				s = n < 0 ? "-" : "", 
+				i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+				j = (j = i.length) > 3 ? j % 3 : 0;
+			return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+		}
+		
+		function milisec2Date(milisec){
+			var date=new Date(milisec);
+			var dd=('0'+date.getDate()).slice(-2);
+			var mm=('0'+(date.getMonth() + 1)).slice(-2);
+			var yyyy=date.getFullYear();
+			var hh=('0'+date.getHours()).slice(-2);
+			var MM=('0'+date.getMinutes()).slice(-2);
+			var ss=('0'+date.getSeconds()).slice(-2);
+			return settings.dateformat.replace('dd',dd).replace('mm',mm).replace('yyyy',yyyy).replace('hh',hh).replace('MM',mm).replace('ss',ss);
 		}
 	};
 	

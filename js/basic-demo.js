@@ -3,12 +3,15 @@ $(document).ready(function(){
 		height:'200px',
 		columns:[
 			{name:'ten',title:'Họ tên'},
-			{name:'tuoi',title:'Tuổi',css:{'text-align':'right'}},
+			{name:'tuoi',title:'Tuổi',css:{'text-align':'right'},editable:true,format:true},
 			{name:'diachi',title:'Địa chỉ'},
 			{name:'ttac',title:'T.Tác',type:'control',css:{'text-align':'center','width':'50px'},content:function(obj){return '<a href="#" class="del-row">Link</a>'}}
 		],
 		shwfooter:true,
-		extclass:'tbl-bold-footer'
+		extclass:'tbl-bold-footer',
+		onCellCommit:function(obj){
+			console.log(obj);
+		}
 	});
 	
 	$('#jdgrid1').jdGrid({
@@ -16,17 +19,19 @@ $(document).ready(function(){
 		class:'table table-bordered',
 		columns:[
 			{name:'name',title:'Name'},
-			{name:'age',title:'Age',css:{'text-align':'right'}},
+			{name:'age',title:'Age',css:{'text-align':'right'},editable:true},
 			{name:'address',title:'Address'},
+			{name:'today',title:'Today',type:'interval'},
 			{name:'married',title:'Mred',type:'check',css:{'text-align':'center'}}
 		],
 		data:[
-			{name:'Otto Clay',age:61,address:'911-5143 Luctus Ave',married:true},
-			{name:'Timothy Henson',age:78,address:'P.O. Box 738, 7583 Quisque St.',married:false},
-			{name:'Ramona Benton',age:43,address:'847-4303 Dictum Av.',married:true}
+			{name:'Otto Clay',age:61,address:'911-5143 Luctus Ave',today:1519789004647,married:true},
+			{name:'Timothy Henson',age:78,address:'P.O. Box 738, 7583 Quisque St.',today:1519789004647,married:false},
+			{name:'Ramona Benton',age:43,address:'847-4303 Dictum Av.',today:1519789004647,married:true}
 		],
 		footer:{'age':52},
-		shwfooter:true
+		shwfooter:true,
+		dateformat:'yyyy/mm/dd'
 	});
 	
 	$('#jdgrid2').jdGrid({
@@ -36,9 +41,9 @@ $(document).ready(function(){
 			{name:'name',title:'Name'},
 			{name:'position',title:'Position', color:'red'},
 			{name:'office',title:'Office'},
-			{name:'age',title:'Age',type:'textbox',css:{'text-align':'right','width':'100px'},editable:true},
+			{name:'age',title:'Age',type:'textbox',css:{'text-align':'right','width':'80px'},editable:true},
 			{name:'date',title:'Start date'},
-			{name:'salary',title:'Salary',type:'money',css:{'text-align':'right'}},
+			{name:'salary',title:'Salary',type:'money',css:{'text-align':'right'},format:true},
 			{name:'input',title:'Act',css:{'text-align':'center','width':'50px'},type:'control',content:function(obj){return '<a href="#">Link</a>'}},
 		],
 		data:[
@@ -57,7 +62,8 @@ $(document).ready(function(){
 		shwfooter:true,
 		onRowSelected:function(obj){
 			//console.log(obj);
-		}
+		},
+		decnum:0
 	});
 	
 	
@@ -150,6 +156,7 @@ $(document).ready(function(){
 			$('#jdgrid').data('jdgrid').removeRow($('.del-row').index($(this)));
 		});
 		$('#jdgrid').data('jdgrid').setFooter({tuoi:65});
+		console.log($('#jdgrid2').data('jdgrid').getSelectedRow());
 	});
 	
 	$(window).resize(function(){
