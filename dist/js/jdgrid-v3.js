@@ -198,8 +198,9 @@
 					if(e.which==13){
 						var row = $(this).parent().parent().index();
 						var col = $(this).parent().index();
-						settings.data[row][settings.columns[col]['name']]=$(this).val();
-						$(this).parent().html($(this).val());
+						var val=settings.columns[col].format&&!isNaN($(this).val())?$(this).val():0;
+						settings.data[row][settings.columns[col]['name']]=val;
+						$(this).parent().html(settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val());
 						adjColums(dom);
 						settings.onCellCommit(settings.data[row]);
 					}
