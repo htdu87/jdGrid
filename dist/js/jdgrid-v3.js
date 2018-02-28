@@ -169,7 +169,7 @@
 		}
 		
 		function adjColums(dom){
-			$(dom).find('.jdgrid-body-wrapper table tbody tr:first td').each(function(i,td){
+			$(dom).find('.jdgrid-body-wrapper table thead tr:first th').each(function(i,td){
 				$(dom).find('.jdgrid-header-wrapper table thead tr th:eq('+i+'),.jdgrid-footer-wrapper table tfoot tr td:eq('+i+')').outerWidth($(td).outerWidth());
 			});
 		}
