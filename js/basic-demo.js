@@ -66,79 +66,17 @@ $(document).ready(function(){
 		decnum:0
 	});
 	
-	
-	/* var g=$('#jdgrid').jdGrid({
-		columns:[
-			{name:'name',title:'Name'},
-			{name:'position',title:'Position', color:'red'},
-			{name:'office',title:'Office'},
-			{name:'age',title:'Age',align:'right'},
-			{name:'date',title:'Start date'},
-			{name:'salary',title:'Salary',align:'right',type:'money'},
-			{name:'input',title:'Input',type:'textbox',width:'50px'},
-		],
-		borderClr:'red',
-		footer:true,
-		data:[
-			{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:162700,input:3},
-			{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000,input:3},
-			{name:'Bradley Greer',position:'Junior Technical Author',office:'San Francisco',age:66,date:'2009/01/12',salary:86000,input:3},
-			{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:162700,input:3},
-			{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000,input:3}
-		],
-		decimalSeparate:',',
-		thousandSeparate:'.',
-		height:'200px',
-	});
-	
-	var g1=$('#jdgrid1').jdGrid({
-		height:'200px',
-		columns:[
-			{name:'name',title:'Name'},
-			{name:'age',title:'Age',align:'right'},
-			{name:'address',title:'Address'},
-			{name:'married',title:'Mred',align:'center',type:'check'},
-			{name:'input',title:'Input',type:'textbox',width:'100px'},
-			{name:'control',title:'Actions',align:'center',type:'control',content:function(i,item){return '<a href="#">Link</a>'}}
-		],
-		data:[
-			{name:'Otto Clay',age:61,address:'911-5143 Luctus Ave',married:true,input:1},
-			{name:'Timothy Henson',age:78,address:'P.O. Box 738, 7583 Quisque St.',married:false,input:2},
-			{name:'Ramona Benton',age:43,address:'847-4303 Dictum Av.',married:true,input:3}
-		]
-	}); */
-	
-	/* $('#jdpage').jdPage({
-		totalPage:0,
-		curPage:0,
-		itemPerPage:0,
-		totalItem:0,
-		onPageChange:function(page){
-			console.log('jdpage: '+page);
+	$('#jdpage').jdPage({
+		totalPage:8,
+		currentPage:8,
+		totalItem:75,
+		itemOnPage:10,
+		showLabel:true,
+		onPageChanged:function(page){
+			//console.log(page);
+			$('#jdpage').data('jdpage').setCurrentPage(page);
 		}
 	});
-	
-	$('#jdpage1').jdPage({
-		totalPage:3,
-		curPage:1,
-		itemPerPage:10,
-		totalItem:25,
-		onPageChange:function(page){
-			console.log('jdpage1: '+page);
-		}
-	}); */
-	
-	/* g.data('jdgrid').fillData([
-		{name:'Airi Satou',position:'Accountant',office:'Tokyo',age:33,date:'2008/11/28',salary:'162700'},
-		{name:'Ashton Cox',position:'Chief Executive Officer (CEO)',office:'London',age:47,date:'2009/10/09',salary:1200000},
-		{name:'Bradley Greer',position:'Junior Technical Author',office:'San Francisco',age:66,date:'2009/01/12',salary:86000}
-	]);
-	
-	g1.data('jdgrid').fillData([
-		{name:'Otto Clay',age:61,address:'911-5143 Luctus Ave',married:true},
-		{name:'Timothy Henson',age:78,address:'P.O. Box 738, 7583 Quisque St.',married:false},
-		{name:'Ramona Benton',age:43,address:'847-4303 Dictum Av.',married:true}
-	]);  */
 	
 	$('#btnRefresh').click(function(){
 		//$('#jdgrid2').data('jdgrid').clearData();
@@ -157,6 +95,8 @@ $(document).ready(function(){
 		});
 		$('#jdgrid').data('jdgrid').setFooter({tuoi:65});
 		console.log($('#jdgrid2').data('jdgrid').getSelectedRow());
+		
+		
 	});
 	
 	$(window).resize(function(){
