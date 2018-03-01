@@ -26,6 +26,9 @@
 				settings.currentPage=page;
 				genPaging(this.element);
 				regEvent();
+			},
+			getCurrentPage:function(){
+				return settings.currentPage;
 			}
 		};
 		$(this).data('jdpage',jdpage);
