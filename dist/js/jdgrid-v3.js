@@ -189,15 +189,17 @@
 			
 			$(dom).find('.jdgrid-body-wrapper table tbody tr td.editable').off('dblclick').on('dblclick',function(){
 				//debug();
+				var row = $(this).parent().index();
+				var col = $(this).index();
 				var inpt=$('<input type="text"/>');
-				inpt.css({'color':'#000'}).val($(this).text()).width($(this).width());
+				inpt.css({'color':'#000'}).val(settings.data[row][settings.columns[col]['name']]).width($(this).width());
 				$(this).html(inpt);
 				adjColums(dom);
 				inpt.select();
 				inpt.keypress(function(e){
 					if(e.which==13){
-						var row = $(this).parent().parent().index();
-						var col = $(this).parent().index();
+						//var row = $(this).parent().parent().index();
+						//var col = $(this).parent().index();
 						var val=settings.columns[col].format&&!isNaN($(this).val())?$(this).val():0;
 						settings.data[row][settings.columns[col]['name']]=val;
 						$(this).parent().html(settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val());
