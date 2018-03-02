@@ -71,7 +71,8 @@
 			var ul=$('<ul/>').addClass('pagination pagination-sm');
 			var start=settings.currentPage-2>0?settings.currentPage-2:1;
 			var end=start+4>settings.totalPage?settings.totalPage:start+4;
-			start=end-4!=start&&end-4>0?end-4:start;
+			//start=end-4!=start&&end-4>0?end-4:start;
+			start=end-4<=0?1:end-4;
 			ul.append('<li><a href="#" page="1" class="jdpage-page">&laquo;</a></li>');
 			for(var i=start;i<=end;i++){
 				var li=$('<li/>');
