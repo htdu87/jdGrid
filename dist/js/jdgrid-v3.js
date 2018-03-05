@@ -57,6 +57,20 @@
 				getSelectedRow:function(){
 					var i=$(this.element).find('.jdgrid-body-wrapper table tbody tr.actived').index();
 					return i<0?null:settings.data[i];
+				},
+				getSelectedRowIndex:function(){
+					return $(this.element).find('.jdgrid-body-wrapper table tbody tr.actived').index();
+				},
+				clearSelectedRow:function(){
+					$(this.element).find('.jdgrid-body-wrapper table tbody tr.actived').removeClass('actived');
+				},
+				updateRow:function(row,i){
+					if(i>=0){
+						settings.data[i]=row;
+						$(this.element).find('.jdgrid-body-wrapper table tbody tr:eq('+i+')').replaceWith(genTableRow(row));
+						regEvent(this.element);
+						adjColums(this.element);
+					}
 				}
 			};
 			$(this).data('jdgrid',jdgrid);
@@ -198,8 +212,6 @@
 				inpt.select();
 				inpt.keypress(function(e){
 					if(e.which==13){
-						//var row = $(this).parent().parent().index();
-						//var col = $(this).parent().index();
 						var val=settings.columns[col].format&&!isNaN($(this).val())?$(this).val():0;
 						settings.data[row][settings.columns[col]['name']]=val;
 						$(this).parent().html(settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val());
