@@ -15,7 +15,7 @@
 			dateformat:'dd/mm/yyyy hh:MM:ss',
 			onRowSelected:function(){},
 			onCellCommit:function(){},
-			onCellCommiting:function(){}
+			onCellCommiting:function(){return true;}
 		};
 		var settings=$.extend({},defaults,options);
 		return this.each(function(){
