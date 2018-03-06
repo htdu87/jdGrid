@@ -14,7 +14,8 @@
 			decnum:2,
 			dateformat:'dd/mm/yyyy hh:MM:ss',
 			onRowSelected:function(){},
-			onCellCommit:function(){}
+			onCellCommit:function(){},
+			onCellCommiting:function(){}
 		};
 		var settings=$.extend({},defaults,options);
 		return this.each(function(){
@@ -71,6 +72,9 @@
 						regEvent(this.element);
 						adjColums(this.element);
 					}
+				},
+				getCellValue:function(row,col){
+					return settings.data[row][col];
 				}
 			};
 			$(this).data('jdgrid',jdgrid);
@@ -212,11 +216,15 @@
 				inpt.select();
 				inpt.keypress(function(e){
 					if(e.which==13){
-						var val=settings.columns[col].format&&!isNaN($(this).val())?$(this).val():0;
-						settings.data[row][settings.columns[col]['name']]=val;
-						$(this).parent().html(settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val());
-						adjColums(dom);
-						settings.onCellCommit(settings.data[row]);
+						var val=settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val();
+						if(settings.onCellCommiting(val,row,col)){
+							settings.data[row][settings.columns[col]['name']]=val;
+							$(this).parent().html(val);
+							adjColums(dom);
+							settings.onCellCommit(settings.data[row]);
+						}else{
+							$(this).parent().html(settings.data[row][settings.columns[col]['name']]);
+						}
 					}
 				});
 			});
