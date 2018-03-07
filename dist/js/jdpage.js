@@ -39,7 +39,7 @@
 		
 		function genPaging(dom){
 			$(dom).empty();
-			var row=$('<div/>').addClass('row').css({'padding-top':'10px'});
+			var row=$('<div/>').addClass('row');
 			if(settings.showLabel){
 				var frm=(settings.currentPage*settings.itemOnPage-settings.itemOnPage)+1;
 				frm=frm<0?0:frm>settings.totalItem?settings.totalItem:frm;

@@ -15,7 +15,8 @@
 			dateformat:'dd/mm/yyyy hh:MM:ss',
 			onRowSelected:function(){},
 			onCellCommit:function(){},
-			onCellCommiting:function(){return true;}
+			onCellCommiting:function(){return true;},
+			onRowDoubleClick:function(){}
 		};
 		var settings=$.extend({},defaults,options);
 		return this.each(function(){
@@ -203,6 +204,10 @@
 				$(dom).find('.jdgrid-body-wrapper table tbody tr').removeClass('actived');
 				$(this).addClass('actived');
 				settings.onRowSelected(settings.data[$(this).index()]);
+			});
+			
+			$(dom).find('.jdgrid-body-wrapper table tbody tr').off('dblclick').on('dblclick',function(){
+				settings.onRowDoubleClick(settings.data[$(this).index()]);
 			});
 			
 			$(dom).find('.jdgrid-body-wrapper table tbody tr td.editable').off('dblclick').on('dblclick',function(){
