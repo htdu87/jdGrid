@@ -74,8 +74,13 @@
 						adjColums(this.element);
 					}
 				},
-				getCellValue:function(row,col){
-					return settings.data[row][col];
+				getCellValue:function(rowIndex,colName){
+					return settings.data[rowIndex][colName];
+				},
+				setCellValue:function(rowIndex,colName,val){
+					settings.data[rowIndex][colName]=val;
+					row=settings.data[rowIndex];
+					this.updateRow(row,rowIndex);
 				}
 			};
 			$(this).data('jdgrid',jdgrid);
@@ -223,10 +228,10 @@
 					if(e.which==13){
 						var val=settings.columns[col].format?formatNum($(this).val(),settings.decnum,settings.decsym,settings.thosym):$(this).val();
 						if(settings.onCellCommiting(val,row,col)){
-							settings.data[row][settings.columns[col]['name']]=val;
+							settings.data[row][settings.columns[col]['name']]=$(this).val();
 							$(this).parent().html(val);
 							adjColums(dom);
-							settings.onCellCommit(settings.data[row]);
+							settings.onCellCommit($(this).val(),row,col);
 						}else{
 							$(this).parent().html(settings.data[row][settings.columns[col]['name']]);
 						}
